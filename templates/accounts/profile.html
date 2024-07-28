@@ -1,0 +1,99 @@
+{% extends 'plentyone/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .container {
+        max-width: 600px;
+    }
+    .form-control {
+        border-radius: 8px;
+    }
+    .btn-primary {
+        background-color: #2c8a9c;
+        border-color: #2c8a9c;
+        border-radius: 8px;
+    }
+    .btn-primary:hover {
+        background-color: #247a8c;
+        border-color: #247a8c;
+    }
+    .avatar-container {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 20px;
+    }
+    .avatar {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="d-flex align-items-center mb-4">
+        <a href="{% url 'plentyone:home' %}" class="text-dark text-decoration-none me-3">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h2 class="mb-0">User Profile</h2>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="avatar-container">
+            {% if user.profile.avatar %}
+                <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="avatar" id="avatar-preview">
+            {% else %}
+                <img src="{% static '/icons/vip0_icon.png' %}" alt="Default Avatar" class="avatar" id="avatar-preview">
+            {% endif %}
+        </div>
+    
+        <div class="mb-3">
+            <label for="id_first_name" class="form-label">First Name</label>
+            <input type="text" name="first_name" id="id_first_name" class="form-control" value="{{ form.first_name.value|default_if_none:'' }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="id_last_name" class="form-label">Last Name</label>
+            <input type="text" name="last_name" id="id_last_name" class="form-control" value="{{ form.last_name.value|default_if_none:'' }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="id_email" class="form-label">Email</label>
+            <input type="email" name="email" id="id_email" class="form-control" value="{{ form.email.value|default_if_none:'' }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="id_country" class="form-label">Country</label>
+            <input type="text" name="country" id="id_country" class="form-control" value="{{ form.country.value|default_if_none:'' }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="id_city" class="form-label">City</label>
+            <input type="text" name="city" id="id_city" class="form-control" value="{{ form.city.value|default_if_none:'' }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="id_state" class="form-label">State</label>
+            <input type="text" name="state" id="id_state" class="form-control" value="{{ form.state.value|default_if_none:'' }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="id_address" class="form-label">Address</label>
+            <input type="text" name="address" id="id_address" class="form-control" value="{{ form.address.value|default_if_none:'' }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="id_postal_code" class="form-label">Postal Code</label>
+            <input type="text" name="postal_code" id="id_postal_code" class="form-control" value="{{ form.postal_code.value|default_if_none:'' }}">
+        </div>
+    
+        <button type="submit" class="btn btn-primary w-100">Save</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends 'plentyone/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .container {
+        max-width: 600px;
+    }
+    .card {
+        border-radius: 10px;
+        margin-bottom: 15px;
+        padding: 15px;
+    }
+    .current-level {
+        background-color: #e6f7ff;
+    }
+    .vip-0 {
+        background-color: #e6f7ff;
+    }
+    .vip-1 {
+        background-color: #fff2cc;
+    }
+    .vip-2 {
+        background-color: #ffe6e6;
+    }
+    .vip-3 {
+        background-color: #2c3e50;
+        color: white;
+    }
+    .vip-icon {
+        float: right;
+        width: 30px;
+        height: 30px;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="d-flex align-items-center mb-4">
+        <a href="{% url 'plentyone:home' %}" class="text-dark text-decoration-none me-3">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h2 class="mb-0">Level</h2>
+    </div>
+
+    <h3>Member Benefits</h3>
+
+    <div class="card vip-0">
+        <h4>VIP 0 <img src="{% static '/icons/vip0_icon.png' %}" alt="VIP 0" class="vip-icon"></h4>
+        <p>Deposit: 0</p>
+        <p>Daily Orders: 38Commission Ratio: 1%</p>
+    </div>
+
+    <div class="card vip-1">
+        <h4>VIP 1 <img src="{% static '/icons/vip1_icon.png' %}" alt="VIP 1" class="vip-icon"></h4>
+        <p>Deposit: 1000</p>
+        <p>Daily Orders: 40Commission Ratio: 1.6%</p>
+    </div>
+
+    <div class="card vip-2">
+        <h4>VIP 2 <img src="{% static '/icons/vip2_icon.png' %}" alt="VIP 2" class="vip-icon"></h4>
+        <p>Deposit: 3000</p>
+        <p>Daily Orders: 51Commission Ratio: 2%</p>
+    </div>
+
+    <div class="card vip-3">
+        <h4>VIP 3 <img src="{% static '/icons/vip3_icon.png' %}" alt="VIP 3" class="vip-icon"></h4>
+        <p>Deposit: 5000</p>
+        <p>Daily Orders: 60Commission Ratio: 2.5%</p>
+    </div>
+</div>
+{% endblock %}

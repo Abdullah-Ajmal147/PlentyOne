@@ -1,0 +1,219 @@
+{% extends 'plentyone/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <!-- Header -->
+    <header class="d-flex justify-content-between align-items-center mb-3">
+        <img src="{% static 'images/plentyone/logo-secondary.png' %}" alt="Logo" height="30">
+        <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="fi fi-it"></span> IT (+39)
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                <li><a class="dropdown-item" href="#"><span class="fi fi-it"></span> IT (+39)</a></li>
+                <li><a class="dropdown-item" href="#"><span class="fi fi-ca"></span> CA (+1)</a></li>
+                <li><a class="dropdown-item" href="#"><span class="fi fi-fr"></span> FR (+33)</a></li>
+                <li><a class="dropdown-item" href="#"><span class="fi fi-gb"></span> UK (+44)</a></li>
+                <li><a class="dropdown-item" href="#"><span class="fi fi-es"></span> ES (+34)</a></li>
+                 
+            </ul>
+        </div>
+    </header>
+
+    <!-- Banner Image -->
+     <div class="text-center">
+        <img src="{% static 'images/plentyone/logo-secondary-v.jpg' %}" class="img-fluid mb-3" alt="Banner">
+
+     </div>
+
+    <!-- Notification -->
+    <div class="alert alert-light d-flex justify-content-between align-items-center " role="alert">
+        <span >Congratulations to 7067!**** earned 16.9USDT</span>
+        <i class="fas fa-bell"></i>
+    </div>
+
+    <!-- Balance Information -->
+    <div class="row mb-3">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Current Balance</h6>
+                    <h4 class="card-text">$ {{current_balance}}</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Commission Earned</h6>
+                    <h4 class="card-text">$ {{commission_earned}}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Action Buttons -->
+<div class="row mb-3 text-center">
+    <div class="col-3">
+        <a href="{% url 'plentyone:service' %}"><i class="fas fa-sync-alt mb-2"></i>
+        <p>Recharge</p></a>
+    </div>
+    <div class="col-3">
+        <a href="{% url 'plentyone:withdraw' %}"><i class="fas fa-wallet mb-2"></i>
+        <p>Withdraw</p></a>
+    </div>
+    <div class="col-3">
+        <a href="{ url 'share' %}"><i class="fas fa-envelope mb-2"></i>
+        <p>Invite</p></a>
+    </div>
+    <div class="col-3">
+        <a href="{% url 'plentyone:service' %}"><i class="fas fa-headset mb-2"></i>
+        <p>Service</p></a>
+    </div>
+</div>
+
+
+    <!-- Partner Section -->
+    <h5>Partner</h5>
+    <div class=" row mb-3 text-center">
+        <!-- Add partner logos here -->
+        <div class="col-4 mb-2"><img src="{% static 'images/plentyone/shopify.png' %}" alt="Shopify" class="partner-logo"></div>
+        <div class="col-4 mb-2"><img src="{% static 'images/plentyone/wish.png' %}" alt="Wish" class="partner-logo"></div>
+        <div class="col-4 mb-2"><img src="{% static 'images/plentyone/one-buy.png' %}" alt="OnBuy" class="partner-logo"></div>
+        <div class="col-4 mb-2"><img src="{% static 'images/plentyone/AliXpress.png' %}" alt="AliExpress" class="partner-logo"></div>
+        <div class="col-4 mb-2"><img src="{% static 'images/plentyone/Amazon.png' %}" alt="Amazon" class="partner-logo"></div>
+        <div class="col-4 mb-2"><img src="{% static 'images/plentyone/ebay.png' %}" alt="eBay" class="partner-logo"></div>
+        <div class="col-4 mb-2"><img src="{% static 'images/plentyone/tiktok.jpg' %}" alt="TikTok" class="partner-logo"></div>
+        <div class="col-4 mb-2"><img src="{% static 'images/plentyone/manomano.png' %}" alt="ManoMano" class="partner-logo"></div>
+        <div class="col-4 mb-2"><img src="{% static 'images/plentyone/zalando.png' %}" alt="Zalando" class="partner-logo"></div>
+    </div>
+
+    <!-- Member Benefits -->
+<!-- Member Benefits -->
+<h5 class="mb-3">Member Benefits</h5>
+{% for layer in layer %}
+<div class="card vip-{{ layer.level }} mb-3">
+    <div class="card-body">
+        <h5 class="card-title">VIP {{ layer.level }}
+            {% if layer.level == 0 %}
+            <img src="{% static 'icons/vip0_icon.png' %}" alt="VIP 0" class="vip-icon float-end">
+            {% elif layer.level == 1 %}
+            <img src="{% static 'icons/vip1_icon.png' %}" alt="VIP 1" class="vip-icon float-end">
+            {% elif layer.level == 2 %}
+            <img src="{% static 'icons/vip2_icon.png' %}" alt="VIP 2" class="vip-icon float-end">
+            {% elif layer.level == 3 %}
+            <img src="{% static 'icons/vip3_icon.png' %}" alt="VIP 3" class="vip-icon float-end">
+            {% endif %}
+        </h5>
+        <p class="card-text mb-0">Deposit: {{ layer.deposit }}</p>
+        <p class="card-text">Daily Orders: {{ layer.max_orders }}</p>
+        <p class="card-text">Commission Ratio: {{ layer.commission|floatformat:1 }}%</p>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% comment %} <div class="card vip-0 mb-3">
+    <div class="card-body">
+        <h5 class="card-title">VIP 0 <img src="{% static '/icons/vip0_icon.png' %}" alt="VIP 0" class="vip-icon float-end"></h5>
+        <p class="card-text mb-0">Deposit: 0</p>
+        <p class="card-text">Daily Orders: 38</p>
+        <p class="card-text">Commission Ratio: 1%</p>
+    </div>
+</div>
+
+<div class="card vip-1 mb-3">
+    <div class="card-body">
+        <h5 class="card-title">VIP 1 <img src="{% static '/icons/vip1_icon.png' %}" alt="VIP 1" class="vip-icon float-end"></h5>
+        <p class="card-text mb-0">Deposit: 1000</p>
+        <p class="card-text">Daily Orders: 40</p>
+        <p class="card-text">Commission Ratio: 1.6%</p>
+
+    </div>
+</div>
+
+<div class="card vip-2 mb-3">
+    <div class="card-body">
+        <h5 class="card-title">VIP 2 <img src="{% static '/icons/vip2_icon.png' %}" alt="VIP 2" class="vip-icon float-end"></h5>
+        <p class="card-text mb-0">Deposit: 3000</p>
+        <p class="card-text">Daily Orders: 51</p>
+        <p class="card-text">Commission Ratio: 2%</p>
+
+    </div>
+</div>
+
+<div class="card vip-3 mb-3">
+    <div class="card-body">
+        <h5 class="card-title">VIP 3 <img src="{% static '/icons/vip3_icon.png' %}" alt="VIP 3" class="vip-icon float-end"></h5>
+        <p class="card-text mb-0">Deposit: 5000</p>
+        <p class="card-text">Daily Orders: 60</p>
+        <p class="card-text">Commission Ratio: 2.5%</p>
+
+    </div> {% endcomment %}
+
+
+{% block extra_css %}
+<style>
+    .partner-logo {
+        max-width: 100px;
+        height: auto;
+    }
+    .card {
+        border-radius: 10px;
+    }
+    .current-level {
+        background-color: #e6f7ff;
+    }
+    .vip-0 {
+        background-color: #e6f7ff;
+    }
+    .vip-1 {
+        background-color: #fff2cc;
+    }
+    .vip-2 {
+        background-color: #ffe6e6;
+    }
+    .vip-3 {
+        background-color: #2c3e50;
+        color: white;
+    }
+    .vip-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+.scroll-left {
+    height: 50px;	
+    overflow: hidden;
+    position: relative;
+    background: yellow;
+    color: orange;
+    border: 1px solid orange;
+}
+
+.scroll-left p {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    line-height: 50px;
+    text-align: center;
+    /* Starting position */
+    transform: translateX(100%);
+    /* Apply animation to this element */
+    animation: scroll-left 15s linear infinite;
+}
+
+/* Move it (define the animation) */
+@keyframes scroll-left {
+    0% {
+        transform: translateX(100%); 		
+    }
+    100% {
+        transform: translateX(-100%); 
+    }
+}
+</style>
+{% endblock %}

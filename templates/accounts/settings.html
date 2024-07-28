@@ -1,0 +1,112 @@
+{% extends "plentyone/base.html" %}
+
+{% block title %}Account Settings{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-body">
+        <h1 class="card-title mb-4">Account Settings</h1>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex align-items-center">
+                <div class="bg-secondary rounded-circle me-3" style="width: 50px; height: 50px;"></div>
+                <div>
+                    <p class="mb-0">Phone number</p>
+                    <p class="mb-0 fw-bold">{{ phone_number }}</p>
+                </div>
+            </div>
+
+            {% if user.is_authenticated %}
+            <a href=""><button class="btn btn-primary" style="background-color: #4f849f; border-color: #4f849f;">Logout</button>
+            </a>
+        {% endif %}
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <h5>Current Balance</h5>
+                <p class="fw-bold">${{ current_balance }}</p>
+            </div>
+            <div class="col-md-6 mb-3">
+                <h5>Amount frozen</h5>
+                <p class="fw-bold">${{ amount_frozen }}</p>
+            </div>
+            <div class="col-md-6 mb-3">
+                <h5>credit</h5>
+                <p class="fw-bold">{{ credit }}</p>
+            </div>
+            <div class="col-md-6 mb-3">
+                <h5>Invitation code</h5>
+                <p class="fw-bold">{{ invitation_code }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title mb-4">Settings</h2>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3"
+                onclick="location.href='#' style="cursor: pointer;">
+                <div>
+                    <i class="bi bi-person-circle me-2"></i>
+                    <span>Profile</span>
+                </div>
+                <i class="bi bi-chevron-right"></i>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3"
+                onclick="location.href='{% url 'accounts:records' %}';" style="cursor: pointer;">
+                <div>
+                    <i class="bi bi-clock-history me-2"></i>
+                    <span>Records</span>
+                </div>
+                <i class="bi bi-chevron-right"></i>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3"
+                onclick="location.href='{% url 'accounts:layer_information' %}';" style="cursor: pointer;">
+                <div>
+                    <i class="bi bi-bar-chart me-2"></i>
+                    <span>Layer Information</span>
+                </div>
+                <i class="bi bi-chevron-right"></i>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3"
+                onclick="location.href='{% url 'accounts:change_password' %}';" style="cursor: pointer;">
+                <div>
+                    <i class="bi bi-lock me-2"></i>
+                    <span>Change Password</span>
+                </div>
+                <i class="bi bi-chevron-right"></i>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3"
+                onclick="location.href='{% url 'accounts:payment_password' %}';" style="cursor: pointer;">
+                <div>
+                    <i class="bi bi-key me-2"></i>
+                    <span>Payment Password</span>
+                </div>
+                <i class="bi bi-chevron-right"></i>
+            </li>
+        </ul>
+        <h3 class="mt-4 mb-3">Other</h3>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3"
+                onclick="location.href='{% url 'accounts:terms' %}';" style="cursor: pointer;">
+                <div>
+                    <i class="bi bi-file-text me-2"></i>
+                    <span>Terms and Conditions</span>
+                </div>
+                <i class="bi bi-chevron-right"></i>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+<style>
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}

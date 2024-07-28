@@ -1,0 +1,78 @@
+{% extends "plentyone/base.html" %}
+{% load static %}
+
+{% block title %}Order{% endblock %}
+
+{% block extra_css %}
+<style>
+    .nav-tabs .nav-link {
+        color: #495057;
+        border: none;
+        border-bottom: 2px solid transparent;
+    }
+    .nav-tabs .nav-link.active {
+        color: #007bff;
+        background-color: transparent;
+        border-bottom: 2px solid #007bff;
+    }
+    .product-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Order</h1>
+
+<ul class="nav nav-tabs mb-4" id="orderTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="everybody-tab" data-bs-toggle="tab" data-bs-target="#everybody" type="button" role="tab" aria-controls="everybody" aria-selected="true">Everybody</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="onhold-tab" data-bs-toggle="tab" data-bs-target="#onhold" type="button" role="tab" aria-controls="onhold" aria-selected="false">On Hold</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="frozen-tab" data-bs-toggle="tab" data-bs-target="#frozen" type="button" role="tab" aria-controls="frozen" aria-selected="false">Frozen</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="finished-tab" data-bs-toggle="tab" data-bs-target="#finished" type="button" role="tab" aria-controls="finished" aria-selected="false">Finished</button>
+    </li>
+</ul>
+
+<div class="tab-content" id="orderTabsContent">
+    <div class="tab-pane fade show active" id="everybody" role="tabpanel" aria-labelledby="everybody-tab">
+        <!-- Content for Everybody tab -->
+        {% comment %} {% include "plentyone/partials/order_list.html" %} {% endcomment %}
+        {% include "plentyone/partials/order_list.html" with orders=orders %}
+    </div>
+    <div class="tab-pane fade" id="onhold" role="tabpanel" aria-labelledby="onhold-tab">
+        <!-- Content for On Hold tab -->
+        <p>Orders on hold will be displayed here.</p>
+    </div>
+    <div class="tab-pane fade" id="frozen" role="tabpanel" aria-labelledby="frozen-tab">
+        <!-- Content for Frozen tab -->
+        <p>Frozen orders will be displayed here.</p>
+    </div>
+    <div class="tab-pane fade" id="finished" role="tabpanel" aria-labelledby="finished-tab">
+        <!-- Content for Finished tab -->
+        <p>Finished orders will be displayed here.</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var triggerTabList = [].slice.call(document.querySelectorAll('#orderTabs button'))
+        triggerTabList.forEach(function(triggerEl) {
+            var tabTrigger = new bootstrap.Tab(triggerEl)
+            triggerEl.addEventListener('click', function(event) {
+                event.preventDefault()
+                tabTrigger.show()
+            })
+        })
+    });
+</script>
+{% endblock %}

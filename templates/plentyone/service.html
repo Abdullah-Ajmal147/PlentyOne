@@ -1,0 +1,29 @@
+<!-- plentyone/templates/plentyone/Service.html -->
+{% extends 'plentyone/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="container mt-4">
+    <div class="chat-container">
+        <div class="chat-message">
+            <img src="{% static '/icons/bot-avatar.png' %}" alt="Bot Avatar" class="chat-avatar">
+            <div>
+                <div class="chat-bubble">
+                    <strong>Hello</strong>
+                </div>
+                <div class="chat-bubble mt-2">
+                    Welcome to use it! If you encounter any withdrawal problems during use, please contact our customer service team.
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-contact">Contact Customer Service</button>
+
+        <p class="service-time">Service Online Time:10:00-23:00</p>
+    </div>
+</div>
+{% endblock %}
+
+<!-- Repeat similarly for order.html, starts.html, service.html, and account.html -->

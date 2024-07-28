@@ -1,0 +1,107 @@
+{% extends 'plentyone/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .container {
+        max-width: 600px;
+    }
+    .record-list {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .record-item {
+        border-bottom: 1px solid #e0e0e0;
+        padding: 15px;
+    }
+    .record-item:last-child {
+        border-bottom: none;
+    }
+    .record-icon {
+        width: 24px;
+        height: 24px;
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .record-title {
+        font-weight: 600;
+        margin-bottom: 0;
+    }
+    .record-date {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+    .record-amount {
+        font-weight: 600;
+    }
+    .search-input {
+        border-radius: 20px;
+        padding-left: 40px;
+    }
+    .search-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6c757d;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="d-flex align-items-center mb-4">
+        <a href="{% url 'plentyone:home' %}" class="text-dark text-decoration-none me-3">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 class="mb-0">Record</h1>
+    </div>
+
+    <div class="position-relative mb-4">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" class="form-control search-input" placeholder="Search Record">
+    </div>
+
+    <div class="record-list">
+        {% for record in records %}
+        <div class="record-item d-flex align-items-center">
+            <div class="record-icon me-3">
+                <i class="fas fa-file-invoice-dollar text-secondary"></i>
+            </div>
+            <div class="flex-grow-1">
+                <p class="record-title">{{ record.title }}</p>
+                <p class="record-date mb-0">{{ record.date|date:"d/m/y H:i:s" }}</p>
+            </div>
+            <div class="record-amount">
+                $ {{ record.amount|floatformat:3 }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.querySelector('.search-input');
+        const recordItems = document.querySelectorAll('.record-item');
+    
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            recordItems.forEach(item => {
+                const title = item.querySelector('.record-title').textContent.toLowerCase();
+                const date = item.querySelector('.record-date').textContent.toLowerCase();
+                if (title.includes(searchTerm) || date.includes(searchTerm)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+    </script>
+{% endblock %}

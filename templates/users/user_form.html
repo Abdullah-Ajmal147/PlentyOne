@@ -1,0 +1,46 @@
+{% extends "users/base.html" %}
+{% load static %}
+{% block title %}User Form{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <img src="{% static 'images/logo.png' %}" alt="Logo" class="img-fluid" style="max-width: 200px;">
+                    </div>
+                    <h2 class="text-center mb-4">
+                        {% if is_registration %}Create an Account{% else %}Sign In{% endif %}
+                    </h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="hidden" name="is_registration" value="{{ is_registration }}">
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <ul>
+                                    {% for error in form.non_field_errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                        <button type="submit" class="btn btn-primary w-100" style="background-color: #4f849f; border-color: #4f849f;">
+                            {% if is_registration %}Create Account{% else %}Sign In{% endif %}
+                        </button>
+                    </form>
+                    <p class="text-center mt-3">
+                        {% if is_registration %}
+                            Already have an account? <a href="{% url 'login' %}" class="text-decoration-none">Sign in</a>
+                        {% else %}
+                            Don't have an account? <a href="{% url 'register' %}" class="text-decoration-none">Create one</a>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

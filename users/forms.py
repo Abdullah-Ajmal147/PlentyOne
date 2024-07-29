@@ -82,6 +82,16 @@ class CustomUserCreationForm(forms.ModelForm):
 
         return cleaned_data
     
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.is_active = False  # Set is_active to False by default
+
+        if commit:
+            user.set_password(self.cleaned_data['password1'])
+            user.save()
+
+        return user
+    
 from django import forms
 from django.core.validators import RegexValidator
 from django.contrib.auth import authenticate

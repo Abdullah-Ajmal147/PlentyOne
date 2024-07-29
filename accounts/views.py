@@ -1,10 +1,35 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import logout 
+from orders.models import Layer
+from profiles.models import UserProfile
 
+@login_required
 def settings(request):
-    return render(request, 'accounts/settings.html')
+    if request.user.is_authenticated:
+        user= request.user
+        try:
+            user_profile = get_object_or_404(UserProfile, user=user)
+            print('user_profile', user_profile)
+            # layer = Layer.objects.#(id=user_profile.layer_information.id)
+
+            # layer = Layer.objects.all()
+            # print('layer', layer)
+            context = {
+                'current_balance': user_profile.current_balance,
+                'amount_frozen': user_profile.amount_frozen,
+                'credit': user_profile.credit,
+                'invitation_code':user_profile.invitation_code,
+                'phone_number':user_profile.phone_number
+                # 'layer': layer,
+                # 'base_url': settings.BASE_URL,
+            }
+            return render(request, 'accounts/settings.html', context )
+        except:
+            return render(request, 'users/login.html' )
+    else:
+        return render(request, 'users/login.html')
 
 def profile_view(request):
     return render(request, 'accounts/profile.html')

@@ -16,6 +16,8 @@ from orders.models import Item, Layer, Order, OrderItem
 from users.models import CustomUser
 from profiles.models import UserProfile
 
+@login_required
+@csrf_exempt
 def home(request):
     if request.user.is_authenticated:
         print('user login success')

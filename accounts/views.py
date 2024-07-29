@@ -52,7 +52,7 @@ def terms_and_conditions(request):
 def logout_view(request):
     logout(request)
     messages.success(request, 'You have been logged out successfully.')
-    return redirect('login')  # Redirect to the login page after logout
+    return redirect('users:login')  # Redirect to the login page after logout
 
 #Extras
 import random

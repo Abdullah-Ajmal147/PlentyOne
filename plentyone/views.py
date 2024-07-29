@@ -88,7 +88,7 @@ def process_order(request):
                 quantity=quantity,
                 price=item.unit_price
             )
-            return redirect('home')
+            return redirect('plentyone:home') 
             # return render(request, 'plentyone/start.html')
             # return JsonResponse({'status': 'success'})
         except Item.DoesNotExist:
@@ -104,7 +104,8 @@ def order(request):
     order = Order.objects.filter(user = user)
     if order:
         context={
-            'orders': order
+            'orders': order,
+            'base_url': settings.BASE_URL,
         }
         return render(request, 'plentyone/order.html', context)
     else:

@@ -10,7 +10,7 @@
             {% for order_item in order.orderitem_set.all %}
             <div class="row">
                 <div class="col-md-3 mb-3 mb-md-0">
-                    <img src="{{ order_item.item.image.url }}" alt="{{ order_item.item.name }}" class="product-image img-fluid">
+                    <img src="{{ base_url }}{{ order_item.item.product_image.url }}" alt="{{ order_item.item.name }}" class="product-image img-fluid">
                 </div>
                 <div class="col-md-9">
                     <h6>{{ order_item.item.name }}</h6>

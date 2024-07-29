@@ -45,7 +45,7 @@
     <div class="tab-pane fade show active" id="everybody" role="tabpanel" aria-labelledby="everybody-tab">
         <!-- Content for Everybody tab -->
         {% comment %} {% include "plentyone/partials/order_list.html" %} {% endcomment %}
-        {% include "plentyone/partials/order_list.html" with orders=orders %}
+        {% include "plentyone/partials/order_list.html" with orders=orders base_url=base_url %}
     </div>
     <div class="tab-pane fade" id="onhold" role="tabpanel" aria-labelledby="onhold-tab">
         <!-- Content for On Hold tab -->

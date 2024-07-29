@@ -86,8 +86,9 @@ def process_order(request):
                 quantity=quantity,
                 price=item.unit_price
             )
-            
-            return JsonResponse({'status': 'success'})
+            return redirect('home')
+            # return render(request, 'plentyone/start.html')
+            # return JsonResponse({'status': 'success'})
         except Item.DoesNotExist:
             return JsonResponse({'status': 'error', 'message': 'Product not found.'})
         except Exception as e:

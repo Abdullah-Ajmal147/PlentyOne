@@ -44,20 +44,19 @@
 <div class="tab-content" id="orderTabsContent">
     <div class="tab-pane fade show active" id="everybody" role="tabpanel" aria-labelledby="everybody-tab">
         <!-- Content for Everybody tab -->
-        {% comment %} {% include "plentyone/partials/order_list.html" %} {% endcomment %}
         {% include "plentyone/partials/order_list.html" with orders=orders base_url=base_url %}
     </div>
     <div class="tab-pane fade" id="onhold" role="tabpanel" aria-labelledby="onhold-tab">
         <!-- Content for On Hold tab -->
-        <p>Orders on hold will be displayed here.</p>
+        {% include "plentyone/partials/order_list.html" with orders=pending_orders base_url=base_url %}
     </div>
     <div class="tab-pane fade" id="frozen" role="tabpanel" aria-labelledby="frozen-tab">
         <!-- Content for Frozen tab -->
-        <p>Frozen orders will be displayed here.</p>
+        {% include "plentyone/partials/order_list.html" with orders=frozen_orders base_url=base_url %}
     </div>
     <div class="tab-pane fade" id="finished" role="tabpanel" aria-labelledby="finished-tab">
         <!-- Content for Finished tab -->
-        <p>Finished orders will be displayed here.</p>
+        {% include "plentyone/partials/order_list.html" with orders=completed_orders base_url=base_url %}
     </div>
 </div>
 {% endblock %}

@@ -46,8 +46,28 @@
     </div>
 
     <h3>Member Benefits</h3>
+    {% for layer in layer %}
+        <div class="card vip-{{ layer.level }} mb-3">
+            <div class="card-body">
+                <h5 class="card-title">VIP {{ layer.level }}
+                    {% if layer.level == 0 %}
+                    <img src="{% static 'icons/vip0_icon.png' %}" alt="VIP 0" class="vip-icon float-end">
+                    {% elif layer.level == 1 %}
+                    <img src="{% static 'icons/vip1_icon.png' %}" alt="VIP 1" class="vip-icon float-end">
+                    {% elif layer.level == 2 %}
+                    <img src="{% static 'icons/vip2_icon.png' %}" alt="VIP 2" class="vip-icon float-end">
+                    {% elif layer.level == 3 %}
+                    <img src="{% static 'icons/vip3_icon.png' %}" alt="VIP 3" class="vip-icon float-end">
+                    {% endif %}
+                </h5>
+                <p class="card-text mb-0">Deposit: {{ layer.deposit }}</p>
+                <p class="card-text">Daily Orders: {{ layer.max_orders }}</p>
+                <p class="card-text">Commission Ratio: {{ layer.commission|floatformat:1 }}%</p>
+            </div>
+        </div>
+    {% endfor %}
 
-    <div class="card vip-0">
+    {% comment %} <div class="card vip-0">
         <h4>VIP 0 <img src="{% static '/icons/vip0_icon.png' %}" alt="VIP 0" class="vip-icon"></h4>
         <p>Deposit: 0</p>
         <p>Daily Orders: 38Commission Ratio: 1%</p>
@@ -69,6 +89,6 @@
         <h4>VIP 3 <img src="{% static '/icons/vip3_icon.png' %}" alt="VIP 3" class="vip-icon"></h4>
         <p>Deposit: 5000</p>
         <p>Daily Orders: 60Commission Ratio: 2.5%</p>
-    </div>
+    </div> {% endcomment %}
 </div>
 {% endblock %}

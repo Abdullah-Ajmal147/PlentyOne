@@ -29,7 +29,6 @@ def home(request):
             # layer = Layer.objects.#(id=user_profile.layer_information.id)
 
             layer = Layer.objects.all()
-            print('layer', layer)
             context = {
                 'current_balance': user_profile.current_balance,
                 'commission_earned': user_profile.commision_earned,
@@ -42,13 +41,14 @@ def home(request):
     else:
         return render(request, 'users/login.html')
 
-@login_required
+# @login_required
 @csrf_exempt
 def process_order(request):
     if request.method == 'POST':
         try:
             product_id = request.POST.get('product_id')
             quantity = int(request.POST.get('quantity'))
+            print('quantity', quantity)
             
             # Fetch the user profile
             user = request.user
@@ -61,11 +61,11 @@ def process_order(request):
             
             # Check if user has sufficient balance
             if user_profile.current_balance < total:
-                return JsonResponse({'status': 'error', 'message': 'Insufficient balance.'})
+                return JsonResponse({'status': 'error', 'message': 'Insufficient balance.'}, status=400)
             
             # Check if sufficient stock is available
             if item.order_quantity < quantity:
-                return JsonResponse({'status': 'error', 'message': 'Requested quantity exceeds available stock.'})
+                return JsonResponse({'status': 'error', 'message': 'Requested quantity exceeds available stock.'}, status=400)
             
             # Deduct the balance
             user_profile.current_balance -= total
@@ -88,14 +88,26 @@ def process_order(request):
                 quantity=quantity,
                 price=item.unit_price
             )
-            return redirect('plentyone:home') 
+            # return redirect('plentyone:home')
             # return render(request, 'plentyone/start.html')
             # return JsonResponse({'status': 'success'})
+            return JsonResponse({'status': 'success', 'message': 'Order placed successfully.'}, status=200)
         except Item.DoesNotExist:
-            return JsonResponse({'status': 'error', 'message': 'Product not found.'})
+            return JsonResponse({'status': 'error', 'message': 'Product not found.'}, status=404)
         except Exception as e:
-            return JsonResponse({'status': 'error', 'message': str(e)})
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
+     
+def product_detail(request):
+    product_id = request.GET.get('product_id', None)
+    print(product_id)
+    if product_id: 
+        product = get_object_or_404(Item, item_id=product_id)
+        order_quantity = product.order_quantity
+        return render(request, 'plentyone/product_detail.html', {'product': product, 'order_quantity': order_quantity})
+    else:
+        # Handle the case where product_id is not provided or invalid
+        return render(request, 'error.html', {'message': 'Product not found'})
 
 @login_required
 @csrf_exempt
@@ -103,8 +115,16 @@ def order(request):
     user = request.user
     order = Order.objects.filter(user = user)
     if order:
-        context={
+        # Separate orders by status
+        pending_orders = order.filter(status='PENDING')
+        frozen_orders = order.filter(status='FROZEN')
+        completed_orders = order.filter(status='COMPLETED')
+
+        context = {
             'orders': order,
+            'pending_orders': pending_orders,
+            'frozen_orders': frozen_orders,
+            'completed_orders': completed_orders,
             'base_url': settings.BASE_URL,
         }
         return render(request, 'plentyone/order.html', context)
@@ -116,25 +136,32 @@ def group_by_n(iterable, n):
     args = [iter(iterable)] * n
     return zip_longest(*args, fillvalue=None)
 
+@login_required
 def start(request):
-    products = Item.objects.all()
-    grouped_products = list(group_by_n(products, 3))
-    context = {
-        'grouped_products': grouped_products,
-        'base_url': settings.BASE_URL,
-    }
-    return render(request, 'plentyone/start.html', context)
+    user = request.user
+    if user:
+        order = Order.objects.filter(user = user)
+        products = Item.objects.all()
+        grouped_products = list(group_by_n(products, 3))
+        completed_orders = order.filter(status='COMPLETED').count()
+        not_complete = order.count() - completed_orders
+        user_profile = get_object_or_404(UserProfile, user=user)
+        context = {
+            'current_balance': user_profile.current_balance,
+            'amount_frozen': user_profile.amount_frozen,
+            'credit': user_profile.credit,
+            'commision_earned':user_profile.commision_earned,
 
-def product_detail(request):
-    product_id = request.GET.get('product_id', None)
-    print(product_id)
-    if product_id: 
-        product = get_object_or_404(Item, item_id=product_id)
-        order_quantity = product.order_quantity
-        return render(request, 'plentyone/product_detail.html', {'product': product, 'order_quantity': order_quantity})
+            'orders': order.count(),
+            'not_complete': not_complete,
+            'completed_orders': completed_orders,
+            'grouped_products': grouped_products,
+            'base_url': settings.BASE_URL,
+        }
+        return render(request, 'plentyone/start.html', context)
     else:
-        # Handle the case where product_id is not provided or invalid
-        return render(request, 'error.html', {'message': 'Product not found'})
+        return render(request, 'users/login.html')
+    
     
 def pay_now(request):
     if request.method == 'POST':

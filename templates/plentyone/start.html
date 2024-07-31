@@ -54,15 +54,15 @@
 
 <div class="row mb-4">
     <div class="col-4 text-center">
-        <h4>38</h4>
+        <h4>{{completed_orders}}</h4>
         <p>Finished</p>
     </div>
     <div class="col-4 text-center">
-        <h4>38</h4>
+        <h4>{{orders}}</h4>
         <p>Everybody</p>
     </div>
     <div class="col-4 text-center">
-        <h4>0</h4>
+        <h4>{{not_complete}}</h4>
         <p>Not completed</p>
     </div>
 </div>
@@ -71,7 +71,7 @@
     <div class="col-6 mb-3">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">$0</h5>
+                <h5 class="card-title">$ {{current_balance}}</h5>
                 <p class="card-text">Current Balance</p>
             </div>
         </div>
@@ -79,7 +79,7 @@
     <div class="col-6 mb-3">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">$0</h5>
+                <h5 class="card-title">$ {{commision_earned}}</h5>
                 <p class="card-text">Order Commission</p>
             </div>
         </div>
@@ -87,7 +87,7 @@
     <div class="col-6 mb-3">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">$0</h5>
+                <h5 class="card-title">$ {{amount_frozen}}</h5>
                 <p class="card-text">Frozen</p>
             </div>
         </div>
@@ -95,7 +95,7 @@
     <div class="col-6 mb-3">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">10</h5>
+                <h5 class="card-title">$ {{credit}}</h5>
                 <p class="card-text">credit</p>
             </div>
         </div>

@@ -2,16 +2,19 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import logout 
+from accounts.forms import CustomPasswordChangeForm, ProfileForm
 from orders.models import Layer
-from profiles.models import UserProfile
+from profiles.models import UserProfile, Profile
+from django.conf import settings
 
 @login_required
-def settings(request):
+def setting(request):
     if request.user.is_authenticated:
         user= request.user
         try:
             user_profile = get_object_or_404(UserProfile, user=user)
-            print('user_profile', user_profile)
+            profile = get_object_or_404(Profile, user=user)
+
             # layer = Layer.objects.#(id=user_profile.layer_information.id)
 
             # layer = Layer.objects.all()
@@ -21,9 +24,10 @@ def settings(request):
                 'amount_frozen': user_profile.amount_frozen,
                 'credit': user_profile.credit,
                 'invitation_code':user_profile.invitation_code,
-                'phone_number':user_profile.phone_number
+                'phone_number':user_profile.phone_number,
+                'avatar': profile.avatar.url,
                 # 'layer': layer,
-                # 'base_url': settings.BASE_URL,
+                'base_url': settings.BASE_URL,
             }
             return render(request, 'accounts/settings.html', context )
         except:
@@ -31,17 +35,59 @@ def settings(request):
     else:
         return render(request, 'users/login.html')
 
+# def profile_view(request):
+
+#     return render(request, 'accounts/profile.html')
+
+@login_required
 def profile_view(request):
-    return render(request, 'accounts/profile.html')
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('plentyone:home')  # Redirect to the profile page or another page
+    else:
+        form = ProfileForm(instance=profile)
+
+    return render(request, 'accounts/profile.html', {'form': form, 'profile': profile})
 
 def records_view(request):
     return render(request, 'accounts/records.html')
 
 def layer_information_view(request):
-    return render(request, 'accounts/layer_information.html')
+    layer = Layer.objects.all()
+    context = {
+        'layer': layer,
+        'base_url': settings.BASE_URL,
+    }
+    return render(request, 'accounts/layer_information.html', context)
 
+# def change_password_view(request):
+
+#     return render(request, 'accounts/change_password.html')
+
+
+@login_required
 def change_password_view(request):
-    return render(request, 'accounts/change_password.html')
+    if request.method == 'POST':
+        form = CustomPasswordChangeForm(data=request.POST)
+        if form.is_valid():
+            user = request.user
+            new_password = form.cleaned_data['new_password1']
+            user.set_password(new_password)
+            user.save()
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('plentyone:home')
+        else:
+            # Print errors to console for debugging
+            print(form.errors)
+    else:
+        form = CustomPasswordChangeForm()
+
+    return render(request, 'accounts/change_password.html', {'form': form})
+    
 
 def payment_password_view(request):
     return render(request, 'accounts/payment_password.html')

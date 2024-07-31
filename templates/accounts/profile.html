@@ -8,6 +8,7 @@
     }
     .container {
         max-width: 600px;
+        padding: 20px;
     }
     .form-control {
         border-radius: 8px;
@@ -22,50 +23,40 @@
         border-color: #247a8c;
     }
     .avatar-container {
-        width: 100px;
-        height: 100px;
+        width: 150px;
+        height: 150px;
         margin: 0 auto 20px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid #ddd;
     }
     .avatar {
         width: 100%;
         height: 100%;
-        border-radius: 50%;
         object-fit: cover;
+    }
+    .form-label {
+        font-weight: bold;
+    }
+    .text-center {
+        text-align: center;
     }
 </style>
 
 <div class="container mt-4">
-    <div class="d-flex align-items-center mb-4">
-        <a href="{% url 'plentyone:home' %}" class="text-dark text-decoration-none me-3">
-            <i class="fas fa-arrow-left"></i>
-        </a>
-        <h2 class="mb-0">User Profile</h2>
+    <div class="text-center mb-4">
+        <h2>User Profile</h2>
     </div>
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         
         <div class="avatar-container">
-            {% if user.profile.avatar %}
-                <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="avatar" id="avatar-preview">
+            {% if profile.avatar %}
+                <img src="{{ profile.avatar.url }}" alt="Avatar" class="avatar">
             {% else %}
-                <img src="{% static '/icons/vip0_icon.png' %}" alt="Default Avatar" class="avatar" id="avatar-preview">
+                <img src="{% static 'icons/default_avatar.png' %}" alt="Default Avatar" class="avatar">
             {% endif %}
-        </div>
-    
-        <div class="mb-3">
-            <label for="id_first_name" class="form-label">First Name</label>
-            <input type="text" name="first_name" id="id_first_name" class="form-control" value="{{ form.first_name.value|default_if_none:'' }}">
-        </div>
-
-        <div class="mb-3">
-            <label for="id_last_name" class="form-label">Last Name</label>
-            <input type="text" name="last_name" id="id_last_name" class="form-control" value="{{ form.last_name.value|default_if_none:'' }}">
-        </div>
-
-        <div class="mb-3">
-            <label for="id_email" class="form-label">Email</label>
-            <input type="email" name="email" id="id_email" class="form-control" value="{{ form.email.value|default_if_none:'' }}">
         </div>
 
         <div class="mb-3">
@@ -92,8 +83,13 @@
             <label for="id_postal_code" class="form-label">Postal Code</label>
             <input type="text" name="postal_code" id="id_postal_code" class="form-control" value="{{ form.postal_code.value|default_if_none:'' }}">
         </div>
+
+        <div class="mb-3">
+            <label for="id_avatar" class="form-label">Profile Picture</label>
+            <input type="file" name="avatar" id="id_avatar" class="form-control">
+        </div>
     
-        <button type="submit" class="btn btn-primary w-100">Save</button>
+        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
     </form>
 </div>
 {% endblock %}

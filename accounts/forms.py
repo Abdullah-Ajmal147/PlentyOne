@@ -24,7 +24,7 @@ class CustomPasswordChangeForm(forms.Form):
         password_validation.validate_password(password1)
         return password2
     
-    
+
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
@@ -32,3 +32,16 @@ class ProfileForm(forms.ModelForm):
         widgets = {
             'avatar': forms.ClearableFileInput(attrs={'multiple': False}),
         }
+
+
+class PasswordChangeForm(forms.Form):
+    new_password = forms.CharField(widget=forms.PasswordInput, label='New Password')
+    confirm_password = forms.CharField(widget=forms.PasswordInput, label='Re-enter Password')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password = cleaned_data.get("new_password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if new_password != confirm_password:
+            raise forms.ValidationError("Passwords do not match")

@@ -2,8 +2,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import logout 
-from accounts.forms import CustomPasswordChangeForm, ProfileForm
-from orders.models import Layer
+from accounts.forms import CustomPasswordChangeForm, PasswordChangeForm, ProfileForm
+from orders.models import Layer, WithdrawalRequest
 from profiles.models import UserProfile, Profile
 from django.conf import settings
 
@@ -89,8 +89,26 @@ def change_password_view(request):
     return render(request, 'accounts/change_password.html', {'form': form})
     
 
+@login_required
 def payment_password_view(request):
-    return render(request, 'accounts/payment_password.html')
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.POST)
+        if form.is_valid():
+            password = form.cleaned_data['new_password']
+            print(password)
+            user = request.user
+            # Assuming the user should have a related WithdrawalRequest object
+            withdraw = get_object_or_404(Profile, user=user)
+            withdraw.payment_password = password
+            withdraw.save()
+            messages.success(request, "Password changed successfully")
+            return redirect('plentyone:home')
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = PasswordChangeForm()
+
+    return render(request, 'accounts/payment_password.html', {'form': form})
 
 def terms_and_conditions(request):
     return render(request, 'accounts/terms.html')

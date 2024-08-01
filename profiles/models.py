@@ -11,6 +11,7 @@ class Profile(models.Model):
     address = models.CharField(max_length=255, blank=True)
     postal_code = models.CharField(max_length=20, blank=True)
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True, default='avatars/funEmoji-1720771137510_44EkmhY.png')
+    payment_password = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return self.country # Assuming CustomUser has phone_number

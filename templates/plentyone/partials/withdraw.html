@@ -32,6 +32,10 @@
     .text-muted {
         color: #a0a0a0 !important;
     }
+    .form-error {
+        color: red;
+        font-size: 0.875em;
+    }
 </style>
 
 <div class="container mt-4 mb-5">
@@ -59,28 +63,40 @@
 
     <form method="post" action="{% url 'plentyone:withdraw' %}">
         {% csrf_token %}
+        {% if form.errors %}
+            <div class="form-error">
+                {% for field in form %}
+                    {% if field.errors %}
+                        <div>
+                            <strong>{{ field.label }}:</strong> {{ field.errors }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                {% if form.non_field_errors %}
+                    <div>
+                        <strong>Non-field errors:</strong> {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
         <div class="mb-3">
             <label for="amount" class="form-label">Amount</label>
-            <input type="number" class="form-control" id="amount" name="amount" placeholder="Amount" required>
+            {{ form.amount }}
         </div>
         
         <div class="mb-3">
             <label for="network" class="form-label">Network</label>
-            <select class="form-select" id="network" name="network" required>
-                <option value="" selected disabled>select crypto</option>
-                <option value="USDT-TRC20">USDT - TRC20</option>
-                <!-- Add more options as needed -->
-            </select>
+            {{ form.network }}
         </div>
         
         <div class="mb-3">
             <label for="address" class="form-label">Address</label>
-            <input type="text" class="form-control" id="address" name="address" placeholder="Address" required>
+            {{ form.address }}
         </div>
         
         <div class="mb-3">
             <label for="password" class="form-label">Withdrawal Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your withdrawal password" required>
+            {{ form.password }}
         </div>
         
         <button type="submit" class="btn btn-primary w-100">Confirm</button>

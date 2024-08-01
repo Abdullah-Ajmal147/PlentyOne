@@ -15,7 +15,7 @@ from itertools import zip_longest
 from plentyone.forms import WithdrawalForm
 from orders.models import Item, Layer, Order, OrderItem
 from users.models import CustomUser
-from profiles.models import UserProfile
+from profiles.models import UserProfile, Profile
 
 @login_required
 @csrf_exempt
@@ -232,9 +232,11 @@ def login_view(request):
 def withdraw(request):
     user = request.user
     user_profile = get_object_or_404(UserProfile, user=user)
+    profile = get_object_or_404(Profile, user=user)
+
     
     if request.method == 'POST':
-        form = WithdrawalForm(request.POST)
+        form = WithdrawalForm(request.POST, user=user) 
         if form.is_valid():
             withdrawal_request = form.save(commit=False)
             withdrawal_request.user = user

@@ -17,20 +17,18 @@
                 <li><a class="dropdown-item" href="#"><span class="fi fi-fr"></span> FR (+33)</a></li>
                 <li><a class="dropdown-item" href="#"><span class="fi fi-gb"></span> UK (+44)</a></li>
                 <li><a class="dropdown-item" href="#"><span class="fi fi-es"></span> ES (+34)</a></li>
-                 
             </ul>
         </div>
     </header>
 
     <!-- Banner Image -->
-     <div class="text-center">
+    <div class="text-center">
         <img src="{% static 'images/plentyone/logo-secondary-v.jpg' %}" class="img-fluid mb-3" alt="Banner">
-
-     </div>
+    </div>
 
     <!-- Notification -->
-    <div class="alert alert-light d-flex justify-content-between align-items-center " role="alert">
-        <span >Congratulations to 7067!**** earned 16.9USDT</span>
+    <div class="alert alert-light d-flex justify-content-between align-items-center" role="alert">
+        <span>Congratulations to 7067!**** earned 16.9USDT</span>
         <i class="fas fa-bell"></i>
     </div>
 
@@ -40,7 +38,7 @@
             <div class="card">
                 <div class="card-body">
                     <h6 class="card-title">Current Balance</h6>
-                    <h4 class="card-text">$ {{current_balance}}</h4>
+                    <h4 class="card-text">$ {{ current_balance }}</h4>
                 </div>
             </div>
         </div>
@@ -48,36 +46,59 @@
             <div class="card">
                 <div class="card-body">
                     <h6 class="card-title">Commission Earned</h6>
-                    <h4 class="card-text">$ {{commission_earned}}</h4>
+                    <h4 class="card-text">$ {{ commission_earned }}</h4>
                 </div>
             </div>
         </div>
     </div>
 
-<!-- Action Buttons -->
-<div class="row mb-3 text-center">
-    <div class="col-3">
-        <a href="{% url 'plentyone:service' %}"><i class="fas fa-sync-alt mb-2"></i>
-        <p>Recharge</p></a>
+    <!-- Action Buttons -->
+    <div class="row mb-3 text-center">
+        <div class="col-3">
+            <a href="{% url 'plentyone:service' %}" class="btn btn-light d-flex flex-column align-items-center">
+                <i class="fas fa-sync-alt mb-2"></i>
+                <p>Recharge</p>
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="{% url 'plentyone:withdraw' %}" class="btn btn-light d-flex flex-column align-items-center">
+                <i class="fas fa-wallet mb-2"></i>
+                <p>Withdraw</p>
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="#" onclick="showInviteCode()" class="btn btn-light d-flex flex-column align-items-center">
+                <i class="fas fa-envelope mb-2"></i>
+                <p>Invite</p>
+            </a>
+            <div id="invite-popup" class="modal" tabindex="-1" role="dialog" style="display:none;">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Your Invitation Code</h5>
+                            <button type="button" class="close" onclick="closeInvitePopup()" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="invite-code"></p>
+                            <button class="btn btn-secondary" onclick="copyInviteCode()">Copy Code</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <a href="{% url 'plentyone:service' %}" class="btn btn-light d-flex flex-column align-items-center">
+                <i class="fas fa-headset mb-2"></i>
+                <p>Service</p>
+            </a>
+        </div>
     </div>
-    <div class="col-3">
-        <a href="{% url 'plentyone:withdraw' %}"><i class="fas fa-wallet mb-2"></i>
-        <p>Withdraw</p></a>
-    </div>
-    <div class="col-3">
-        <a href="{ url 'share' %}"><i class="fas fa-envelope mb-2"></i>
-        <p>Invite</p></a>
-    </div>
-    <div class="col-3">
-        <a href="{% url 'plentyone:service' %}"><i class="fas fa-headset mb-2"></i>
-        <p>Service</p></a>
-    </div>
-</div>
-
 
     <!-- Partner Section -->
     <h5>Partner</h5>
-    <div class=" row mb-3 text-center">
+    <div class="row mb-3 text-center">
         <!-- Add partner logos here -->
         <div class="col-4 mb-2"><img src="{% static 'images/plentyone/shopify.png' %}" alt="Shopify" class="partner-logo"></div>
         <div class="col-4 mb-2"><img src="{% static 'images/plentyone/wish.png' %}" alt="Wish" class="partner-logo"></div>
@@ -91,68 +112,28 @@
     </div>
 
     <!-- Member Benefits -->
-<!-- Member Benefits -->
-<h5 class="mb-3">Member Benefits</h5>
-{% for layer in layer %}
-<div class="card vip-{{ layer.level }} mb-3">
-    <div class="card-body">
-        <h5 class="card-title">VIP {{ layer.level }}
-            {% if layer.level == 0 %}
-            <img src="{% static 'icons/vip0_icon.png' %}" alt="VIP 0" class="vip-icon float-end">
-            {% elif layer.level == 1 %}
-            <img src="{% static 'icons/vip1_icon.png' %}" alt="VIP 1" class="vip-icon float-end">
-            {% elif layer.level == 2 %}
-            <img src="{% static 'icons/vip2_icon.png' %}" alt="VIP 2" class="vip-icon float-end">
-            {% elif layer.level == 3 %}
-            <img src="{% static 'icons/vip3_icon.png' %}" alt="VIP 3" class="vip-icon float-end">
-            {% endif %}
-        </h5>
-        <p class="card-text mb-0">Deposit: {{ layer.deposit }}</p>
-        <p class="card-text">Daily Orders: {{ layer.max_orders }}</p>
-        <p class="card-text">Commission Ratio: {{ layer.commission|floatformat:1 }}%</p>
+    <h5 class="mb-3">Member Benefits</h5>
+    {% for layer in layers %}
+    <div class="card vip-{{ layer.level }} mb-3">
+        <div class="card-body">
+            <h5 class="card-title">VIP {{ layer.level }}
+                {% if layer.level == 0 %}
+                <img src="{% static 'icons/vip0_icon.png' %}" alt="VIP 0" class="vip-icon float-end">
+                {% elif layer.level == 1 %}
+                <img src="{% static 'icons/vip1_icon.png' %}" alt="VIP 1" class="vip-icon float-end">
+                {% elif layer.level == 2 %}
+                <img src="{% static 'icons/vip2_icon.png' %}" alt="VIP 2" class="vip-icon float-end">
+                {% elif layer.level == 3 %}
+                <img src="{% static 'icons/vip3_icon.png' %}" alt="VIP 3" class="vip-icon float-end">
+                {% endif %}
+            </h5>
+            <p class="card-text mb-0">Deposit: {{ layer.deposit }}</p>
+            <p class="card-text">Daily Orders: {{ layer.max_orders }}</p>
+            <p class="card-text">Commission Ratio: {{ layer.commission|floatformat:1 }}%</p>
+        </div>
     </div>
-</div>
-{% endfor %}
+    {% endfor %}
 {% endblock %}
-
-{% comment %} <div class="card vip-0 mb-3">
-    <div class="card-body">
-        <h5 class="card-title">VIP 0 <img src="{% static '/icons/vip0_icon.png' %}" alt="VIP 0" class="vip-icon float-end"></h5>
-        <p class="card-text mb-0">Deposit: 0</p>
-        <p class="card-text">Daily Orders: 38</p>
-        <p class="card-text">Commission Ratio: 1%</p>
-    </div>
-</div>
-
-<div class="card vip-1 mb-3">
-    <div class="card-body">
-        <h5 class="card-title">VIP 1 <img src="{% static '/icons/vip1_icon.png' %}" alt="VIP 1" class="vip-icon float-end"></h5>
-        <p class="card-text mb-0">Deposit: 1000</p>
-        <p class="card-text">Daily Orders: 40</p>
-        <p class="card-text">Commission Ratio: 1.6%</p>
-
-    </div>
-</div>
-
-<div class="card vip-2 mb-3">
-    <div class="card-body">
-        <h5 class="card-title">VIP 2 <img src="{% static '/icons/vip2_icon.png' %}" alt="VIP 2" class="vip-icon float-end"></h5>
-        <p class="card-text mb-0">Deposit: 3000</p>
-        <p class="card-text">Daily Orders: 51</p>
-        <p class="card-text">Commission Ratio: 2%</p>
-
-    </div>
-</div>
-
-<div class="card vip-3 mb-3">
-    <div class="card-body">
-        <h5 class="card-title">VIP 3 <img src="{% static '/icons/vip3_icon.png' %}" alt="VIP 3" class="vip-icon float-end"></h5>
-        <p class="card-text mb-0">Deposit: 5000</p>
-        <p class="card-text">Daily Orders: 60</p>
-        <p class="card-text">Commission Ratio: 2.5%</p>
-
-    </div> {% endcomment %}
-
 
 {% block extra_css %}
 <style>
@@ -184,36 +165,78 @@
         height: 30px;
     }
 
-.scroll-left {
-    height: 50px;	
-    overflow: hidden;
-    position: relative;
-    background: yellow;
-    color: orange;
-    border: 1px solid orange;
-}
-
-.scroll-left p {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    line-height: 50px;
-    text-align: center;
-    /* Starting position */
-    transform: translateX(100%);
-    /* Apply animation to this element */
-    animation: scroll-left 15s linear infinite;
-}
-
-/* Move it (define the animation) */
-@keyframes scroll-left {
-    0% {
-        transform: translateX(100%); 		
+    .scroll-left {
+        height: 50px;
+        overflow: hidden;
+        position: relative;
+        background: yellow;
+        color: orange;
+        border: 1px solid orange;
     }
-    100% {
-        transform: translateX(-100%); 
+
+    .scroll-left p {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        line-height: 50px;
+        text-align: center;
+        transform: translateX(100%);
+        animation: scroll-left 15s linear infinite;
     }
-}
+
+    @keyframes scroll-left {
+        0% {
+            transform: translateX(100%);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
+    }
 </style>
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+    function showInviteCode() {
+        console.log("Fetching invite code...");
+        fetch("{% url 'plentyone:get_invitation_code' %}", {
+            method: "GET",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => {
+            console.log("Response received:", response);
+            return response.json();
+        })
+        .then(data => {
+            console.log("Invite code data:", data);
+            document.getElementById("invite-code").innerText = data.invitation_code;
+            document.getElementById("invite-popup").style.display = "block";
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    
+    function closeInvitePopup() {
+        console.log("Closing invite popup...");
+        document.getElementById("invite-popup").style.display = "none";
+    }
+    
+    function copyInviteCode() {
+        console.log("Copying invite code...");
+        const inviteCodeText = document.getElementById("invite-code").innerText;
+        navigator.clipboard.writeText(inviteCodeText).then(() => {
+            console.log("Invitation code copied to clipboard:", inviteCodeText);
+            alert("Invitation code copied to clipboard");
+        }, () => {
+            console.error("Failed to copy the code");
+            alert("Failed to copy the code");
+        });
+    }
+</script>
 {% endblock %}

@@ -14,4 +14,5 @@ urlpatterns = [
     path('product-detail/', views.product_detail, name='product_detail'),
     # path('pay-now/', views.pay_now, name='pay-now'),
     path('process_order/', views.process_order, name='process_order'),
+    path('get-invitation-code/', views.get_invitation_code, name='get_invitation_code'),
 ]

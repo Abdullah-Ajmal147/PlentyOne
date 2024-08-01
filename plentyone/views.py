@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.conf import settings
 from itertools import zip_longest
+from plentyone.forms import WithdrawalForm
 from orders.models import Item, Layer, Order, OrderItem
 from users.models import CustomUser
 from profiles.models import UserProfile
@@ -36,10 +37,20 @@ def home(request):
                 'base_url': settings.BASE_URL,
             }
             return render(request, 'plentyone/home.html', context )
-        except:
+        except Exception as e:
+            print(str(e))
             return render(request, 'users/login.html' )
     else:
         return render(request, 'users/login.html')
+
+@login_required
+def get_invitation_code(request):
+    user = request.user
+    if user:
+        invitation_code = user.invitation_code
+        print(invitation_code)
+        return JsonResponse({'success': True, 'invitation_code': invitation_code})
+    return JsonResponse({'success': False, 'message': 'User not found.'})
 
 # @login_required
 @csrf_exempt
@@ -216,11 +227,30 @@ def login_view(request):
             pass
     return render(request, 'plentyone/login.html')
 
+
+@login_required
 def withdraw(request):
-    return render(request, 'plentyone/partials/withdraw.html')
-
-
-# myapp/views.py
+    user = request.user
+    user_profile = get_object_or_404(UserProfile, user=user)
+    
+    if request.method == 'POST':
+        form = WithdrawalForm(request.POST)
+        if form.is_valid():
+            withdrawal_request = form.save(commit=False)
+            withdrawal_request.user = user
+            withdrawal_request.save()
+            user_profile.current_balance -= withdrawal_request.amount
+            user_profile.save()
+            return redirect('plentyone:home')  # Redirect to a success page or home after submission
+    else:
+        form = WithdrawalForm()
+    
+    context = {
+        'current_balance': user_profile.current_balance,
+        'form': form,
+    }
+    
+    return render(request, 'plentyone/partials/withdraw.html', context)
 
 
 def switch_language(request):

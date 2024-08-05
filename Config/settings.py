@@ -108,12 +108,11 @@ LOGIN_URL = '/users/login/'
 
 # Please fix this to use Custom user, 
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://plentyone-production.up.railway.app',
-    'https://475d-102-215-32-221.ngrok-free.app'
-    # Add other trusted origins here
-]
-
+# CSRF_TRUSTED_ORIGINS = [
+#     'https://plentyone-production.up.railway.app',
+#     'https://475d-102-215-32-221.ngrok-free.app'
+# ]
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

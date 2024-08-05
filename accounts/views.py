@@ -13,8 +13,13 @@ def setting(request):
         user= request.user
         try:
             user_profile = get_object_or_404(UserProfile, user=user)
-            profile = get_object_or_404(Profile, user=user)
-
+            try:
+                profile = get_object_or_404(Profile, user=user)
+                profile = profile.avatar.url
+                print('profile', profile)
+            except:
+                profile = None
+                print()
             # layer = Layer.objects.#(id=user_profile.layer_information.id)
 
             # layer = Layer.objects.all()
@@ -25,12 +30,13 @@ def setting(request):
                 'credit': user_profile.credit,
                 'invitation_code':user_profile.invitation_code,
                 'phone_number':user_profile.phone_number,
-                'avatar': profile.avatar.url,
+                'avatar': profile,
                 # 'layer': layer,
                 'base_url': settings.BASE_URL,
             }
             return render(request, 'accounts/settings.html', context )
-        except:
+        except Exception as e:
+            print(str(e))
             return render(request, 'users/login.html' )
     else:
         return render(request, 'users/login.html')

@@ -5,13 +5,13 @@
 
 {% block content %}
     <!-- Header -->
-    <header class="d-flex justify-content-between align-items-center mb-3">
-        <img src="{% static 'images/plentyone/logo-secondary.png' %}" alt="Logo" height="30">
+    <header class="d-flex justify-content-between align-items-center mb-4 py-3 border-bottom">
+        <img src="{% static 'images/plentyone/logo-secondary.png' %}" alt="Logo" height="40">
         <div class="dropdown">
-            <button class="btn btn-light dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="fi fi-it"></span> IT (+39)
             </button>
-            <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
                 <li><a class="dropdown-item" href="#"><span class="fi fi-it"></span> IT (+39)</a></li>
                 <li><a class="dropdown-item" href="#"><span class="fi fi-ca"></span> CA (+1)</a></li>
                 <li><a class="dropdown-item" href="#"><span class="fi fi-fr"></span> FR (+33)</a></li>
@@ -22,29 +22,23 @@
     </header>
 
     <!-- Banner Image -->
-    <div class="text-center">
-        <img src="{% static 'images/plentyone/logo-secondary-v.jpg' %}" class="img-fluid mb-3" alt="Banner">
-    </div>
-
-    <!-- Notification -->
-    <div class="alert alert-light d-flex justify-content-between align-items-center" role="alert">
-        <span>Congratulations to 7067!**** earned 16.9USDT</span>
-        <i class="fas fa-bell"></i>
+    <div class="text-center mb-4">
+        <img src="{% static 'images/plentyone/logo-secondary-v.jpg' %}" class="img-fluid" alt="Banner">
     </div>
 
     <!-- Balance Information -->
-    <div class="row mb-3">
-        <div class="col-6">
-            <div class="card">
-                <div class="card-body">
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-body text-center">
                     <h6 class="card-title">Current Balance</h6>
                     <h4 class="card-text">$ {{ current_balance }}</h4>
                 </div>
             </div>
         </div>
-        <div class="col-6">
-            <div class="card">
-                <div class="card-body">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-body text-center">
                     <h6 class="card-title">Commission Earned</h6>
                     <h4 class="card-text">$ {{ commission_earned }}</h4>
                 </div>
@@ -53,32 +47,30 @@
     </div>
 
     <!-- Action Buttons -->
-    <div class="row mb-3 text-center">
-        <div class="col-3">
-            <a href="https://t.me/Plentyone_Customerservice" class="btn btn-light d-flex flex-column align-items-center" target="_blank" rel="noopener noreferrer">
+    <div class="row g-3 mb-4 text-center">
+        <div class="col-6 col-sm-3">
+            <a href="https://t.me/Plentyone_Customerservice" class="btn btn-outline-primary d-flex flex-column align-items-center py-3" target="_blank" rel="noopener noreferrer">
                 <i class="fas fa-sync-alt mb-2"></i>
                 <p>Recharge</p>
             </a>
         </div>
-        <div class="col-3">
-            <a href="{% url 'plentyone:withdraw' %}" class="btn btn-light d-flex flex-column align-items-center">
+        <div class="col-6 col-sm-3">
+            <a href="{% url 'plentyone:withdraw' %}" class="btn btn-outline-primary d-flex flex-column align-items-center py-3">
                 <i class="fas fa-wallet mb-2"></i>
                 <p>Withdraw</p>
             </a>
         </div>
-        <div class="col-3">
-            <a href="#" onclick="showInviteCode()" class="btn btn-light d-flex flex-column align-items-center">
+        <div class="col-6 col-sm-3">
+            <a href="#" onclick="showInviteCode()" class="btn btn-outline-primary d-flex flex-column align-items-center py-3">
                 <i class="fas fa-envelope mb-2"></i>
                 <p>Invite</p>
             </a>
-            <div id="invite-popup" class="modal" tabindex="-1" role="dialog" style="display:none;">
+            <div id="invite-popup" class="modal fade" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Your Invitation Code</h5>
-                            <button type="button" class="close" onclick="closeInvitePopup()" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <p id="invite-code"></p>
@@ -88,8 +80,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-3">
-            <a href="https://t.me/Plentyone_Customerservice" class="btn btn-light d-flex flex-column align-items-center" target="_blank" rel="noopener noreferrer">
+        <div class="col-6 col-sm-3">
+            <a href="https://t.me/Plentyone_Customerservice" class="btn btn-outline-primary d-flex flex-column align-items-center py-3" target="_blank" rel="noopener noreferrer">
                 <i class="fas fa-headset mb-2"></i>
                 <p>Service</p>
             </a>
@@ -97,38 +89,38 @@
     </div>
 
     <!-- Partner Section -->
-    <h5>Partner</h5>
-    <div class="row mb-3 text-center">
+    <h5 class="mb-4 text-center">Partner</h5>
+    <div class="row g-3 mb-4 text-center">
         <!-- Add partner logos here -->
-        <div class="col-4 mb-2"><img src="{% static 'images/plentyone/shopify.png' %}" alt="Shopify" class="partner-logo"></div>
-        <div class="col-4 mb-2"><img src="{% static 'images/plentyone/wish.png' %}" alt="Wish" class="partner-logo"></div>
-        <div class="col-4 mb-2"><img src="{% static 'images/plentyone/one-buy.png' %}" alt="OnBuy" class="partner-logo"></div>
-        <div class="col-4 mb-2"><img src="{% static 'images/plentyone/AliXpress.png' %}" alt="AliExpress" class="partner-logo"></div>
-        <div class="col-4 mb-2"><img src="{% static 'images/plentyone/Amazon.png' %}" alt="Amazon" class="partner-logo"></div>
-        <div class="col-4 mb-2"><img src="{% static 'images/plentyone/ebay.png' %}" alt="eBay" class="partner-logo"></div>
-        <div class="col-4 mb-2"><img src="{% static 'images/plentyone/tiktok.jpg' %}" alt="TikTok" class="partner-logo"></div>
-        <div class="col-4 mb-2"><img src="{% static 'images/plentyone/manomano.png' %}" alt="ManoMano" class="partner-logo"></div>
-        <div class="col-4 mb-2"><img src="{% static 'images/plentyone/zalando.png' %}" alt="Zalando" class="partner-logo"></div>
+        <div class="col-6 col-md-4 col-lg-3"><img src="{% static 'images/plentyone/shopify.png' %}" alt="Shopify" class="partner-logo"></div>
+        <div class="col-6 col-md-4 col-lg-3"><img src="{% static 'images/plentyone/wish.png' %}" alt="Wish" class="partner-logo"></div>
+        <div class="col-6 col-md-4 col-lg-3"><img src="{% static 'images/plentyone/one-buy.png' %}" alt="OnBuy" class="partner-logo"></div>
+        <div class="col-6 col-md-4 col-lg-3"><img src="{% static 'images/plentyone/AliXpress.png' %}" alt="AliExpress" class="partner-logo"></div>
+        <div class="col-6 col-md-4 col-lg-3"><img src="{% static 'images/plentyone/Amazon.png' %}" alt="Amazon" class="partner-logo"></div>
+        <div class="col-6 col-md-4 col-lg-3"><img src="{% static 'images/plentyone/ebay.png' %}" alt="eBay" class="partner-logo"></div>
+        <div class="col-6 col-md-4 col-lg-3"><img src="{% static 'images/plentyone/tiktok.jpg' %}" alt="TikTok" class="partner-logo"></div>
+        <div class="col-6 col-md-4 col-lg-3"><img src="{% static 'images/plentyone/manomano.png' %}" alt="ManoMano" class="partner-logo"></div>
+        <div class="col-6 col-md-4 col-lg-3"><img src="{% static 'images/plentyone/zalando.png' %}" alt="Zalando" class="partner-logo"></div>
     </div>
 
     <!-- Member Benefits -->
-    <h5 class="mb-3">Member Benefits</h5>
+    <h5 class="mb-4 text-center">Member Benefits</h5>
     {% for layer in layers %}
-    <div class="card vip-{{ layer.level }} mb-3">
+    <div class="card vip-{{ layer.level }} mb-4">
         <div class="card-body">
-            <h5 class="card-title">VIP {{ layer.level }}
+            <h5 class="card-title d-flex justify-content-between align-items-center">VIP {{ layer.level }}
                 {% if layer.level == 0 %}
-                <img src="{% static 'icons/vip0_icon.png' %}" alt="VIP 0" class="vip-icon float-end">
+                <img src="{% static 'icons/vip0_icon.png' %}" alt="VIP 0" class="vip-icon">
                 {% elif layer.level == 1 %}
-                <img src="{% static 'icons/vip1_icon.png' %}" alt="VIP 1" class="vip-icon float-end">
+                <img src="{% static 'icons/vip1_icon.png' %}" alt="VIP 1" class="vip-icon">
                 {% elif layer.level == 2 %}
-                <img src="{% static 'icons/vip2_icon.png' %}" alt="VIP 2" class="vip-icon float-end">
+                <img src="{% static 'icons/vip2_icon.png' %}" alt="VIP 2" class="vip-icon">
                 {% elif layer.level == 3 %}
-                <img src="{% static 'icons/vip3_icon.png' %}" alt="VIP 3" class="vip-icon float-end">
+                <img src="{% static 'icons/vip3_icon.png' %}" alt="VIP 3" class="vip-icon">
                 {% endif %}
             </h5>
-            <p class="card-text mb-0">Deposit: {{ layer.deposit }}</p>
-            <p class="card-text">Daily Orders: {{ layer.max_orders }}</p>
+            <p class="card-text mb-1">Deposit: {{ layer.deposit }}</p>
+            <p class="card-text mb-1">Daily Orders: {{ layer.max_orders }}</p>
             <p class="card-text">Commission Ratio: {{ layer.commission|floatformat:1 }}%</p>
         </div>
     </div>
@@ -142,7 +134,8 @@
         height: auto;
     }
     .card {
-        border-radius: 10px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
     .current-level {
         background-color: #e6f7ff;
@@ -164,17 +157,12 @@
         width: 30px;
         height: 30px;
     }
-
     .scroll-left {
         height: 50px;
         overflow: hidden;
         position: relative;
-        background: yellow;
-        color: orange;
-        border: 1px solid orange;
     }
-
-    .scroll-left p {
+    .scroll-left h4 {
         position: absolute;
         width: 100%;
         height: 100%;
@@ -184,7 +172,6 @@
         transform: translateX(100%);
         animation: scroll-left 15s linear infinite;
     }
-
     @keyframes scroll-left {
         0% {
             transform: translateX(100%);
@@ -197,46 +184,24 @@
 {% endblock %}
 
 {% block extra_js %}
-
 <script>
     function showInviteCode() {
-        console.log("Fetching invite code...");
-        fetch("{% url 'plentyone:get_invitation_code' %}", {
-            method: "GET",
-            headers: {
-                "X-CSRFToken": "{{ csrf_token }}",
-                "Content-Type": "application/json"
-            }
-        })
-        .then(response => {
-            console.log("Response received:", response);
-            return response.json();
-        })
-        .then(data => {
-            console.log("Invite code data:", data);
-            document.getElementById("invite-code").innerText = data.invitation_code;
-            document.getElementById("invite-popup").style.display = "block";
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+        document.getElementById('invite-popup').classList.add('show');
+        document.getElementById('invite-popup').style.display = 'block';
+        document.getElementById('invite-popup').setAttribute('aria-modal', 'true');
+        document.getElementById('invite-popup').removeAttribute('aria-hidden');
+        document.getElementById('invite-code').innerText = "{{ invite_code }}";
     }
-    
-    function closeInvitePopup() {
-        console.log("Closing invite popup...");
-        document.getElementById("invite-popup").style.display = "none";
-    }
-    
     function copyInviteCode() {
-        console.log("Copying invite code...");
-        const inviteCodeText = document.getElementById("invite-code").innerText;
-        navigator.clipboard.writeText(inviteCodeText).then(() => {
-            console.log("Invitation code copied to clipboard:", inviteCodeText);
-            alert("Invitation code copied to clipboard");
-        }, () => {
-            console.error("Failed to copy the code");
-            alert("Failed to copy the code");
+        navigator.clipboard.writeText(document.getElementById('invite-code').innerText).then(() => {
+            alert('Invite code copied to clipboard!');
         });
     }
+    document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(dropdownToggleEl => {
+        dropdownToggleEl.addEventListener('click', function () {
+            var dropdownMenu = this.nextElementSibling;
+            dropdownMenu.classList.toggle('show');
+        });
+    });
 </script>
 {% endblock %}

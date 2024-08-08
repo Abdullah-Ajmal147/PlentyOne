@@ -33,7 +33,7 @@ def home(request):
             context = {
                 'current_balance': user_profile.current_balance,
                 'commission_earned': user_profile.commision_earned,
-                'layer': layer,
+                'layers': layer,
                 'base_url': settings.BASE_URL,
             }
             return render(request, 'plentyone/home.html', context )

@@ -20,6 +20,8 @@
             max-width: 100%;
             height: auto;
             max-height: 500px;
+            border-radius: 8px; /* Added for smoother appearance */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added shadow for depth */
         }
         .quantity-controls {
             display: flex;
@@ -34,6 +36,8 @@
         .quantity-controls input {
             width: 80px;
             text-align: center;
+            border: 1px solid #ced4da; /* Added border for input field */
+            border-radius: 4px; /* Rounded corners */
         }
         .toast-container {
             position: fixed;
@@ -56,6 +60,9 @@
         .toast-error {
             background-color: #dc3545;
         }
+        #error-message {
+            display: none; /* Hide error message by default */
+        }
     </style>
 </head>
 <body>
@@ -75,7 +82,7 @@
                         <button id="increase-quantity" type="button" class="btn btn-outline-secondary">+</button>
                     </div>
                     <p>Total: $<span id="total-price">{{ product.unit_price }}</span></p>
-                    <p id="error-message" class="text-danger" style="display:none;">Your order quantity exceeds the available stock of {{ order_quantity }}!</p>
+                    <p id="error-message" class="text-danger"></p>
                     
                     {% csrf_token %}
                     <input type="hidden" name="product_id" value="{{ product.item_id }}">
@@ -93,24 +100,24 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var decreaseButton = document.getElementById('decrease-quantity');
-            var increaseButton = document.getElementById('increase-quantity');
-            var quantityInput = document.getElementById('quantity');
-            var productPrice = parseFloat(document.getElementById('product-price').textContent);
-            var totalPriceElement = document.getElementById('total-price');
-            var orderQuantity = {{ order_quantity }};
-            var errorMessage = document.getElementById('error-message');
-            var orderForm = document.getElementById('order-form');
-            var toastContainer = document.getElementById('toast-container');
-
+            const decreaseButton = document.getElementById('decrease-quantity');
+            const increaseButton = document.getElementById('increase-quantity');
+            const quantityInput = document.getElementById('quantity');
+            const productPrice = parseFloat(document.getElementById('product-price').textContent);
+            const totalPriceElement = document.getElementById('total-price');
+            const orderQuantity = {{ order_quantity }};
+            const errorMessage = document.getElementById('error-message');
+            const orderForm = document.getElementById('order-form');
+            const toastContainer = document.getElementById('toast-container');
+        
             function updateTotalPrice() {
-                var quantity = parseInt(quantityInput.value);
-                var totalPrice = productPrice * quantity;
+                const quantity = parseInt(quantityInput.value);
+                const totalPrice = productPrice * quantity;
                 totalPriceElement.textContent = totalPrice.toFixed(2);
             }
-
+        
             function checkQuantity() {
-                var quantity = parseInt(quantityInput.value);
+                const quantity = parseInt(quantityInput.value);
                 if (quantity > orderQuantity) {
                     errorMessage.style.display = 'block';
                     increaseButton.disabled = true;
@@ -119,7 +126,7 @@
                     increaseButton.disabled = false;
                 }
             }
-
+        
             decreaseButton.addEventListener('click', function() {
                 if (quantityInput.value > 1) {
                     quantityInput.value--;
@@ -127,80 +134,75 @@
                     checkQuantity();
                 }
             });
-
+        
             increaseButton.addEventListener('click', function() {
                 quantityInput.value++;
                 updateTotalPrice();
                 checkQuantity();
             });
-
+        
             quantityInput.addEventListener('input', function() {
                 updateTotalPrice();
                 checkQuantity();
             });
-
-            function showToasts(message, type='success') {
-                var toastHtml = `
-                    <div class="toast toast-${type}">
-                        ${message}
-                    </div>
-                `;
-                toastContainer.innerHTML = toastHtml;
-                var toastElement = toastContainer.querySelector('.toast');
-                toastElement.style.display = 'block';
-                setTimeout(function() {
-                    toastElement.style.opacity = 0;
-                    setTimeout(function() {
-                        toastElement.remove();
-                    }, 500);  // Wait for fade out to complete
-                }, 3000);  // Show toast for 3 seconds
-            }
+        
             function showToast(message, type='success') {
-                var toastElement = document.createElement('div');
+                const toastElement = document.createElement('div');
                 toastElement.classList.add('toast', `toast-${type}`);
                 toastElement.textContent = message;
                 toastContainer.appendChild(toastElement);
-                setTimeout(function() {
+                toastElement.style.display = 'block';
+                setTimeout(() => {
                     toastElement.style.opacity = 0;
-                    setTimeout(function() {
+                    setTimeout(() => {
                         toastElement.remove();
-                    }, 500);  // Wait for fade out to complete
-                }, 3000);  // Show toast for 3 seconds
+                    }, 500);
+                }, 3000);
             }
-
+        
             orderForm.addEventListener('submit', function(event) {
                 event.preventDefault();
+                const formData = new FormData(orderForm);
+                console.log('Form Data:', Object.fromEntries(formData.entries())); // Log form data
+        
                 fetch(orderForm.action, {
                     method: "POST",
-                    body: new FormData(orderForm),
+                    body: formData,
                     headers: {
                         'X-CSRFToken': '{{ csrf_token }}'
                     }
                 })
                 .then(response => {
+                    console.log('Response status:', response.status); // Log response status
                     if (!response.ok) {
-                        showToast('testttt', 'success');
-                        throw new Error('Network response was not ok');
+                        return response.json().then(data => {
+                            console.error('Error response body:', data); // Log error response body
+                            showToast(data.message, 'error');  // Display the error message from API
+                            throw new Error('Network response was not ok');
+                        });
                     }
                     return response.json();
                 })
                 .then(data => {
-                    console.log(data);  // Log the response for debugging
+                    console.log('API Response:', data);  // Log the API response
+        
                     if (data.status === 'success') {
                         showToast(data.message, 'success');
-                        setTimeout(function() {
+                        setTimeout(() => {
                             window.location.href = '/';  // Redirect to home page on success
-                        }, 2000);  // Show toast for 2 seconds before redirecting
+                        }, 2000);
                     } else {
-                        showToast(data.message, 'danger');
+                        showToast(data.message, 'error'); // Show error message from API
                     }
                 })
                 .catch(error => {
-                    console.error(error);  // Log the error for debugging
-                    showToast('An error occurred while processing your order. Please try again.', 'danger');
+                    console.error('Fetch error:', error);  // Log any fetch errors
+                    // No need to show an additional toast here since the error toast is already shown
                 });
             });
         });
+        
     </script>
+    
 </body>
 </html>

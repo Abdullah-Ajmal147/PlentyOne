@@ -232,7 +232,7 @@ def login_view(request):
 def withdraw(request):
     user = request.user
     user_profile = get_object_or_404(UserProfile, user=user)
-    profile = get_object_or_404(Profile, user=user)
+    # profile = get_object_or_404(Profile, user=user)
 
     
     if request.method == 'POST':

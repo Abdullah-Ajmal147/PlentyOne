@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-8 col-lg-6">
             <div class="card mt-5">
                 <div class="card-body">
                     <div class="text-center mb-4">
@@ -14,7 +14,6 @@
                     <h2 class="text-center mb-4">Sign in</h2>
                     <form method="post">
                         {% csrf_token %}
-                        {{form.as_p}}
                         {% if form.non_field_errors %}
                             <div class="alert alert-danger">
                                 <ul>
@@ -24,17 +23,17 @@
                                 </ul>
                             </div>
                         {% endif %}
+                        
                         <div class="mb-3">
-                            <!-- <label for="phone_number" class="form-label">Phone number</label> -->
-                            <div class="input-group {% if form.phone_number.errors %}is-invalid{% endif %}">
-                                <select class="form-select" style="max-width: 120px;">
+                            <div class="input-group">
+                                <select class="form-select {% if form.phone_number.errors %}is-invalid{% endif %}" style="max-width: 120px;">
                                     <option value="39" selected>IT (+39)</option>
                                     <option value="1">CA (+1)</option>
                                     <option value="33">FR (+33)</option>
                                     <option value="44">UK (+44)</option>
                                     <option value="34">ES (+34)</option>
                                 </select>
-                                <!-- <input type="tel" class="form-control {% if form.phone_number.errors %}is-invalid{% endif %}" id="phone_number" name="phone_number" placeholder="Enter your phone number" required> -->
+                                <input type="tel" class="form-control {% if form.phone_number.errors %}is-invalid{% endif %}" id="phone_number" name="phone_number" placeholder="Enter your phone number" required>
                                 {% if form.phone_number.errors %}
                                     <div class="invalid-feedback">
                                         {% for error in form.phone_number.errors %}
@@ -44,19 +43,26 @@
                                 {% endif %}
                             </div>
                         </div>
+                        
                         <div class="mb-3">
-                            {% comment %} <label for="password" class="form-label">Password</label> {% endcomment %}
-                            <!-- <input type="password" class="form-control {% if form.password.errors %}is-invalid{% endif %}" id="password" name="password" placeholder="Enter your password" required> -->
-                            {% comment %} {% if form.password.errors %}
+                            <input type="password" class="form-control {% if form.password.errors %}is-invalid{% endif %}" id="password" name="password" placeholder="Enter your password" required>
+                            {% if form.password.errors %}
                                 <div class="invalid-feedback">
                                     {% for error in form.password.errors %}
                                         <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
-                            {% endif %} {% endcomment %}
+                            {% endif %}
                         </div>
                         
                         <button type="submit" class="btn btn-primary w-100" style="background-color: #4f849f; border-color: #4f849f;">Sign in</button>
+                        
+                        <!-- Forgot Password Button -->
+                        <div class="text-center mt-3">
+                            <a href="https://t.me/Plentyone_Customerservice" class="btn btn-outline-primary" target="_blank" rel="noopener noreferrer">
+                                <i class="fas fa-lock"></i> Forgot Password?
+                            </a>
+                        </div>
                     </form>
                     <p class="text-center mt-3">Don't have an account? <a href="{% url 'register' %}" class="text-decoration-none">Create an account</a></p>
                 </div>

@@ -59,6 +59,10 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+AUTHENTICATION_BACKENDS = [
+    'users.backends.PhoneNumberBackend',  # Replace 'yourapp' with the actual app name
+    'django.contrib.auth.backends.ModelBackend',  # Keep the default backend
+]
 
 AUTH_PASSWORD_VALIDATORS = [
     {

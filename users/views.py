@@ -5,6 +5,7 @@ from users.models import CustomUser
 from .forms import CustomUserCreationForm, PhoneLoginForm
 from django.contrib.auth.decorators import login_required
 from django.views import View
+from users.backends import PhoneNumberBackend
 
 class RegisterView(View):
     form_class = CustomUserCreationForm
@@ -49,13 +50,25 @@ class LoginView(View):
         if form.is_valid():
             phone_number=form.cleaned_data.get('phone_number')
             password=form.cleaned_data.get('password')
-            user_obj = CustomUser.objects.filter(phone_number=phone_number).exists()
-            if user_obj:
-                user = CustomUser.objects.get(phone_number=phone_number)
-            # user = authenticate(request, username=form.cleaned_data.get('username'), password=form.cleaned_data.get('password'))
+
+            user = authenticate(request, phone_number=phone_number, password=password)
             if user is not None:
                 login(request, user)
                 return redirect('plentyone:home') 
+            else:
+                # Invalid login credentials
+                form.add_error(None, "Invalid phone number or password.")
+                
+            # user_obj = CustomUser.objects.filter(phone_number=phone_number).exists()
+            # user_obj = PhoneNumberBackend.authenticate(phone_number=phone_number, password=password)
+            # if user_obj:
+            #     user = CustomUser.objects.get(phone_number=phone_number)
+            # else:
+            #     print('user not found')
+            # # user = authenticate(request, username=form.cleaned_data.get('username'), password=form.cleaned_data.get('password'))
+            # if user is not None:
+            #     login(request, user)
+            #     return redirect('plentyone:home') 
         return render(request, self.template_name, {'form': form})
     
     # def post(self, request, *args, **kwargs):

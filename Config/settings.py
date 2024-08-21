@@ -122,3 +122,4 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # BASE_URL = 'http://127.0.0.1:8000/'
 BASE_URL = 'http://18.118.31.188/'
+BASE_URL = 'https://it-plentyone.com/'

@@ -6,6 +6,8 @@ from .forms import CustomUserCreationForm, PhoneLoginForm
 from django.contrib.auth.decorators import login_required
 from django.views import View
 from users.backends import PhoneNumberBackend
+from django.contrib.auth import get_backends
+
 
 class RegisterView(View):
     form_class = CustomUserCreationForm
@@ -20,9 +22,27 @@ class RegisterView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
+
+            # Get the backend and set it on the user object
+            backends = get_backends()
+            if backends:
+                user.backend = backends[0].__class__.__module__ + '.' + backends[0].__class__.__name__
+
+            login(request, user, backend=user.backend)
             return redirect('plentyone:home') 
         return render(request, self.template_name, {'form': form})
+
+    # def get(self, request, *args, **kwargs):
+    #     form = self.form_class(initial=self.initial)
+    #     return render(request, self.template_name, {'form': form})
+
+    # def post(self, request, *args, **kwargs):
+    #     form = self.form_class(request.POST)
+    #     if form.is_valid():
+    #         user = form.save()
+    #         login(request, user)
+    #         return redirect('plentyone:home') 
+    #     return render(request, self.template_name, {'form': form})
 
 class LoginView(View):
     """

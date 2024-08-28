@@ -60,12 +60,12 @@ class CustomUserCreationForm(forms.ModelForm):
     phone_number = forms.CharField(validators=[phone_regex], max_length=17, widget=forms.TextInput(attrs={'placeholder': 'Enter your phone number'}))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Enter your password'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Confirm your password'}))
-    invite_code = forms.CharField(max_length=8, required=False, widget=forms.TextInput(attrs={'placeholder': 'Enter invite code'}))
-    agreement = forms.BooleanField(required=True, widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+    # invite_code = forms.CharField(max_length=8, required=False, widget=forms.TextInput(attrs={'placeholder': 'Enter invite code'}))
+    # agreement = forms.BooleanField(required=True, widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
 
     class Meta:
         model = CustomUser
-        fields = ('phone_number', 'password1', 'password2', 'invite_code', 'agreement')
+        fields = ('phone_number', 'password1', 'password2', )#'invite_code', 'agreement')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -103,7 +103,7 @@ class UnifiedUserForm(forms.ModelForm):
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Enter your password'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Confirm your password'}), required=False)
     invite_code = forms.CharField(max_length=8, required=False, widget=forms.TextInput(attrs={'placeholder': 'Enter invite code'}))
-    agreement = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+    # agreement = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
 
     class Meta:
         model = CustomUser

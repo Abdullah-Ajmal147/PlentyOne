@@ -6,7 +6,7 @@
 {% block content %}
 <h1 class="mb-4 text-center">Grab Order</h1>
 
-<div id="productCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+<div id="productCarousel" class="carousel slide mb-4">
     <div class="carousel-inner">
         {% for group in grouped_products %}
             <div class="carousel-item {% if forloop.first %}active{% endif %}">
@@ -138,7 +138,7 @@
 <script>
     $(document).ready(function(){
         $('#productCarousel').carousel({
-            interval: 20000
+            interval: false // Disable auto-scrolling
         });
     });
 </script>

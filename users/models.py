@@ -29,7 +29,8 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(_('phone number'), max_length=20, unique=True)
-    invitation_code = models.CharField(max_length=8, unique=True, default=generate_invitation_code)
+    # invitation_code = models.CharField(max_length=8, unique=True, default=generate_invitation_code)
+    joining_invitation_code = models.CharField(max_length=20, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)

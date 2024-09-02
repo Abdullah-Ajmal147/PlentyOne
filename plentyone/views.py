@@ -16,6 +16,13 @@ from plentyone.forms import WithdrawalForm
 from orders.models import Item, Layer, Order, OrderItem
 from users.models import CustomUser
 from profiles.models import UserProfile, Profile
+import secrets
+import string
+
+def generate_invitation_code(length=10):
+    # Generates a secure random string of letters and digits
+    characters = string.ascii_letters + string.digits
+    return ''.join(secrets.choice(characters) for _ in range(length))
 
 @login_required
 @csrf_exempt
@@ -27,6 +34,11 @@ def home(request):
             print('test', user)
             user_profile = get_object_or_404(UserProfile, user=user)
             print(user_profile)
+            if user_profile.invitation_code == None:
+                user_profile.invitation_code = generate_invitation_code()
+    
+                # Save the updated UserProfile
+                user_profile.save()
             # layer = Layer.objects.#(id=user_profile.layer_information.id)
 
             layer = Layer.objects.all()
@@ -35,6 +47,7 @@ def home(request):
                 'commission_earned': user_profile.commision_earned,
                 'layers': layer,
                 'base_url': settings.BASE_URL,
+                'invite_code': user_profile.invitation_code
             }
             return render(request, 'plentyone/home.html', context )
         except Exception as e:

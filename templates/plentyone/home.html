@@ -61,20 +61,21 @@
             </a>
         </div>
         <div class="col-6 col-sm-3">
-            <a href="#" onclick="showInviteCode()" class="btn btn-outline-primary d-flex flex-column align-items-center py-3">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#invite-popup" class="btn btn-outline-primary d-flex flex-column align-items-center py-3">
                 <i class="fas fa-envelope mb-2"></i>
                 <p>Invite</p>
             </a>
-            <div id="invite-popup" class="modal fade" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
+            <!-- Invite Modal -->
+            <div id="invite-popup" class="modal fade" tabindex="-1" aria-labelledby="invitePopupLabel" aria-hidden="true">
+                <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Your Invitation Code</h5>
+                            <h5 class="modal-title" id="invitePopupLabel">Your Invitation Code</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p id="invite-code"></p>
-                            <button class="btn btn-secondary" onclick="copyInviteCode()">Copy Code</button>
+                            <p id="invite-code">{{ invite_code }}</p>
+                            <button class="btn btn-secondary" id="copy-invite-code">Copy Code</button>
                         </div>
                     </div>
                 </div>
@@ -91,7 +92,6 @@
     <!-- Partner Section -->
     <h5 class="mb-4 text-center">Partner</h5>
     <div class="row g-3 mb-4 text-center">
-        <!-- Add partner logos here -->
         <div class="col-6 col-md-4 col-lg-3"><img src="{% static 'images/plentyone/shopify.png' %}" alt="Shopify" class="partner-logo"></div>
         <div class="col-6 col-md-4 col-lg-3"><img src="{% static 'images/plentyone/wish.png' %}" alt="Wish" class="partner-logo"></div>
         <div class="col-6 col-md-4 col-lg-3"><img src="{% static 'images/plentyone/one-buy.png' %}" alt="OnBuy" class="partner-logo"></div>
@@ -185,22 +185,21 @@
 
 {% block extra_js %}
 <script>
-    function showInviteCode() {
-        document.getElementById('invite-popup').classList.add('show');
-        document.getElementById('invite-popup').style.display = 'block';
-        document.getElementById('invite-popup').setAttribute('aria-modal', 'true');
-        document.getElementById('invite-popup').removeAttribute('aria-hidden');
-        document.getElementById('invite-code').innerText = "{{ invite_code }}";
-    }
-    function copyInviteCode() {
-        navigator.clipboard.writeText(document.getElementById('invite-code').innerText).then(() => {
-            alert('Invite code copied to clipboard!');
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize Bootstrap tooltips and modals
+        var modals = document.querySelectorAll('.modal');
+        modals.forEach(function(modal) {
+            new bootstrap.Modal(modal);
         });
-    }
-    document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(dropdownToggleEl => {
-        dropdownToggleEl.addEventListener('click', function () {
-            var dropdownMenu = this.nextElementSibling;
-            dropdownMenu.classList.toggle('show');
+
+        // Copy invite code to clipboard
+        document.getElementById('copy-invite-code').addEventListener('click', function () {
+            var inviteCode = document.getElementById('invite-code').innerText;
+            navigator.clipboard.writeText(inviteCode).then(function() {
+                alert('Invite code copied to clipboard!');
+            }).catch(function(err) {
+                console.error('Failed to copy the invite code: ', err);
+            });
         });
     });
 </script>

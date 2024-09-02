@@ -56,17 +56,53 @@ class PhoneLoginForm(forms.Form):
 #             raise forms.ValidationError("You must agree to the Registration Agreement.")
 #         return agreement
 
+# class CustomUserCreationForm(forms.ModelForm):
+#     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+#     phone_number = forms.CharField(validators=[phone_regex], max_length=17, widget=forms.TextInput(attrs={'placeholder': 'Enter your phone number'}))
+#     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Enter your password'}))
+#     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Confirm your password'}))
+#     invite_code = forms.CharField(max_length=8, required=False, widget=forms.TextInput(attrs={'placeholder': 'Enter invite code'}))
+#     # agreement = forms.BooleanField(required=True, widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+
+#     class Meta:
+#         model = CustomUser
+#         fields = ('phone_number', 'password1', 'password2', 'invite_code')#, 'agreement')
+
+#     def clean(self):
+#         cleaned_data = super().clean()
+#         phone_number = cleaned_data.get('phone_number')
+
+#         if CustomUser.objects.filter(phone_number=phone_number).exists():
+#             self.add_error('phone_number', 'User with this phone number already exists.')
+
+#         password1 = cleaned_data.get('password1')
+#         password2 = cleaned_data.get('password2')
+
+#         if password1 and password2 and password1 != password2:
+#             self.add_error('password2', "Passwords do not match.")
+
+#         return cleaned_data
+    
+#     def save(self, commit=True):
+#         user = super().save(commit=False)
+#         user.is_active = False  # Set is_active to False by default
+
+#         if commit:
+#             user.set_password(self.cleaned_data['password1'])
+#             user.save()
+
+#         return user
 class CustomUserCreationForm(forms.ModelForm):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone_number = forms.CharField(validators=[phone_regex], max_length=17, widget=forms.TextInput(attrs={'placeholder': 'Enter your phone number'}))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Enter your password'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Confirm your password'}))
-    # invite_code = forms.CharField(max_length=8, required=False, widget=forms.TextInput(attrs={'placeholder': 'Enter invite code'}))
+    invite_code = forms.CharField(max_length=8, required=False, widget=forms.TextInput(attrs={'placeholder': 'Enter invite code'}))
     # agreement = forms.BooleanField(required=True, widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
 
     class Meta:
         model = CustomUser
-        fields = ('phone_number', 'password1', 'password2', )#'invite_code', 'agreement')
+        fields = ('phone_number', 'password1', 'password2', 'invite_code')#, 'agreement')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -82,17 +118,20 @@ class CustomUserCreationForm(forms.ModelForm):
             self.add_error('password2', "Passwords do not match.")
 
         return cleaned_data
-    
+
     def save(self, commit=True):
         user = super().save(commit=False)
         user.is_active = False  # Set is_active to False by default
+
+        invite_code = self.cleaned_data.get('invite_code')
+        if invite_code:
+            user.joining_invitation_code = invite_code
 
         if commit:
             user.set_password(self.cleaned_data['password1'])
             user.save()
 
-        return user
-    
+        return user   
 
 class UnifiedUserForm(forms.ModelForm):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
